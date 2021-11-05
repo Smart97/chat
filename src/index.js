@@ -9,7 +9,7 @@ let Message = (props) =>(
 )
 let App = () => (
   <div>
-    <Message messageText={'some text from props'}/>
+    <Message messageText={'text from props'}/>
   </div>
 )
 ReactDOM.render(
