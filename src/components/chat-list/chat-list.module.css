@@ -1,0 +1,7 @@
+.chatList {
+    width: 10%;
+    background-color: #cfcfcf;
+}
+.active {
+    background-color: #e7e5e5;
+}

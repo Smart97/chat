@@ -38,7 +38,7 @@ export const MessageList = () => {
                 <Message key={index} message={message}></Message>)}
             </div>
             <div>
-                <Input fullWidth type='text' name='text' placeholder="message" value={text} onKeyPress={handePressInput} onChange={e => setText(e.target.value)} endAdornment={<InputAdornment position='end'><Send className={styles.icon} onClick={setNewMessage} /></InputAdornment>}></Input>
+                <Input autoFocus={true} fullWidth type='text' name='text' placeholder="message" value={text} onKeyPress={handePressInput} onChange={e => setText(e.target.value)} endAdornment={<InputAdornment position='end'><Send className={styles.icon} onClick={setNewMessage} /></InputAdornment>}></Input>
             </div>
 
 
