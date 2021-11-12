@@ -1,0 +1,10 @@
+.userMessage {
+    border: 1px solid #000;
+}
+.botMessage {
+    border: 1px solid rgb(0, 0, 150);
+}
+.message {
+    margin-bottom: 5px;
+    padding: 3px;
+}

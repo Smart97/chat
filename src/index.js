@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { ThemeProvider, createTheme, List, ListItem, ListItemText } from '@mui/material'
+import { MessageList, ChatList } from './components';
+import { style } from '@mui/system';
+import styles from './styles.module.css';
 
-let Message = (props) =>(
-  <div>
-    <p>{props.messageText}</p>
-  </div>
-)
-let App = () => (
-  <div>
-    <Message messageText={'some text from props'}/>
-  </div>
-)
+
+const light = createTheme({
+  theme: {
+    color: "#fff",
+  },
+})
+
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
+  <ThemeProvider theme={light}>
+    <React.StrictMode>
+      <div className={styles.chat}>
+        <ChatList />
+        <MessageList></MessageList>
+      </div>
+    </React.StrictMode>
+  </ThemeProvider>,
   document.getElementById('root')
 );
