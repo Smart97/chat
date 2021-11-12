@@ -1,24 +1,44 @@
-import React from "react";
-import { ThemeProvider, createTheme } from "@mui/material";
-import ReactDOM from "react-dom";
-import { MessageList } from "./components";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { useState, useEffect } from 'react';
 
-const light = createTheme({
-  theme: {
-    color: "#fff",
-  },
-});
+const App = () => { 
+  const [messages, setMessages] = useState([]);
+  const setNewMessage = () => {
+   setMessages((prevMessages) => ([...prevMessages, {author: 'user', message: text}])); 
+   setText('');
+  } 
+  const [text, setText] = useState('');
 
-const dark = createTheme({
-  theme: {
-    color: "#000",
-  },
-});
+  useEffect(() => {setTimeout(() => {
+    if(messages.length && lastMessage.author !=='bot') {
+      setMessages((prevMessages) => ([...prevMessages, {author: 'bot', message: 'Hello from bot'}])); 
+    }
+  }, 500);
+    const lastMessage = messages[messages.length-1];
+    
+
+  }, [messages])
+
+  return (
+    <div>    
+      <ul>{messages.map((message) => <li>{message.author}: {message.message}</li>)}</ul>
+      <div>
+      <div>{text}</div>
+      <input type='text' name='text' placeholder="text" value={text} onChange={e => setText(e.target.value)}></input>
+      <button onClick={setNewMessage}>setNewMessage</button>                                                                                                              
+    </div>
+
+                                                        
+    </div>
+
+    );
+}
+
 
 ReactDOM.render(
-  <ThemeProvider theme={light}>
-    <MessageList />
-    55
-  </ThemeProvider>,
-  document.getElementById("root")
+  <React.StrictMode>
+    <App></App>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
