@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { List, ListItem, ListItemText } from '@mui/material'
-import styles from './chat-list.module.css';
-import classNames from 'classnames';
-
+import { List } from "@mui/material";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { Chat } from "./chat";
 
 export const ChatList = () => {
-    const [chats, setChats] = useState([{ name: 'first', id: 1 }, { name: 'second', id: 2 }, { name: 'third', id: 3 }])
-  
-    return (
-      <List className={styles.chatList}>
-        {chats.map((chat) => <ListItem className={classNames({
-            [styles.active]: chat.id===1,
-        })} key={chat.id}> <ListItemText primary={chat.name}></ListItemText></ListItem >)}
-      </List>
-    )
-  }
+  const [chats] = useState(["room1", "room2", "room3"]);
+  const params = useParams()
+
+  return (
+    <List component="nav">
+      {chats.map((chat, index) => (
+        <Link key={chat} to={`/chat/${chat}`}>
+          <Chat title = {chat} selected={params.roomId === chat}></Chat>
+        </Link>
+      ))}
+    </List>
+  );
+};

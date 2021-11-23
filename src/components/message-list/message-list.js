@@ -1,48 +1,102 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Message } from './message';
-import styles from './message-list.module.css';
-import { Input, InputAdornment } from '@mui/material'
-import { Send } from '@mui/icons-material'
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Input, InputAdornment } from "@mui/material";
+import { Send } from "@mui/icons-material";
+import { makeStyles } from "@mui/styles";
+// import PropTypes from "prop-types";
+import { Message } from "./message";
 
+// jss
+export const useStyles = makeStyles((ctx) => {
+  return {
+    input: {
+      color: "#9a9fa1",
+      padding: "10px 15px",
+      fontSize: "15px",
+    },
+    icon: {
+      color: "#2b5278",
+    },
+  };
+});
 
 export const MessageList = () => {
-    const [messages, setMessages] = useState([]);
-    const setNewMessage = () => {
-        if (text) {
-            setMessages((prevMessages) => ([...prevMessages, { author: 'user', message: text }]));
-            setText('');
-        }
+  const s = useStyles();
 
+  const [messageList, setMessageList] = useState([]);
+  const [value, setValue] = useState("");
+
+  const ref = useRef(null);
+
+  const sendMessage = () => {
+    if (value) {
+      setMessageList([
+        ...messageList,
+        { author: "User", message: value, date: new Date() },
+      ]);
+      setValue("");
     }
-    const [text, setText] = useState('');
+  };
 
-    useEffect(() => {
-        setTimeout(() => {
-            if (messages.length && lastMessage.author !== 'bot') {
-                setMessages((prevMessages) => ([...prevMessages, { author: 'bot', message: 'Hello from bot' }]));
-            }
-        }, 500);
-        const lastMessage = messages[messages.length - 1];
-
-
-    }, [messages])
-    const handePressInput = ({ code }) => {
-        if (code === 'Enter') {
-            setNewMessage();
-        }
+  const handlePressInput = ({ code }) => {
+    if (code === "Enter") {
+      sendMessage();
     }
-    return (
-        <div className={styles.wrapper}>
-            <div>{messages.map((message, index) =>
-                <Message key={index} message={message}></Message>)}
-            </div>
-            <div>
-                <Input autoFocus={true} fullWidth type='text' name='text' placeholder="message" value={text} onKeyPress={handePressInput} onChange={e => setText(e.target.value)} endAdornment={<InputAdornment position='end'><Send className={styles.icon} onClick={setNewMessage} /></InputAdornment>}></Input>
-            </div>
+  };
 
+  const handleScrollBottom = useCallback(() => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight);
+    }
+  }, []);
 
-        </div>
+  useEffect(() => {
+    handleScrollBottom();
+  }, [messageList, handleScrollBottom]);
 
-    );
-}
+  useEffect(() => {
+    const lastMessage = messageList[messageList.length - 1];
+
+    if (messageList.length && lastMessage.author === "User") {
+      setTimeout(() => {
+        setMessageList([
+          ...messageList,
+          { author: "Bot", message: "Hello from Bot", date: new Date() },
+        ]);
+      }, 500);
+    }
+  }, [messageList]);
+
+  return (
+    <>
+      <div ref={ref}>
+        {messageList.map((message, index) => (
+          <Message key={index} message={message} />
+        ))}
+      </div>
+
+      <Input
+        className={s.input}
+        fullWidth
+        placeholder="Введите сообщение..."
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyPress={handlePressInput}
+        endAdornment={
+          <InputAdornment position="end">
+            {value && <Send onClick={sendMessage} className={s.icon} />}
+          </InputAdornment>
+        }
+      />
+    </>
+  );
+};
+
+// MessageList.propTypes = {
+//   test1: PropTypes.number.isRequired,
+//   test2: PropTypes.array.isRequired,
+//   test3: PropTypes.bool.isRequired,
+//   test4: PropTypes.shape({
+//     id: PropTypes.bool.isRequired,
+//   }).isRequired,
+//   test5: PropTypes.func.isRequired,
+// };
